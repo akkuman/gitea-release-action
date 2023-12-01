@@ -23,6 +23,8 @@ The following are optional as `step.with` keys
 
 ```yaml
 uses: akkuman/gitea-release-action@v1.0.0
+env:
+  NODE_OPTIONS: '--experimental-fetch' # if nodejs < 18
 with:
   files: |-
     bin/**

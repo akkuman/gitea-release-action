@@ -2328,61 +2328,62 @@ exports.request = request;
 /***/ 5371:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+var __webpack_unused_export__;
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.UserService = exports.SettingsService = exports.RepositoryService = exports.PackageService = exports.OrganizationService = exports.NotificationService = exports.MiscellaneousService = exports.IssueService = exports.AdminService = exports.Team = exports.MigrateRepoOptions = exports.MergePullRequestOption = exports.EditTeamOption = exports.EditOrgOption = exports.CreateTeamOption = exports.CreateRepoOption = exports.CreateOrgOption = exports.CreateMilestoneOption = exports.CreateHookOption = exports.OpenAPI = exports.CancelError = exports.CancelablePromise = exports.BaseHttpRequest = exports.ApiError = exports.GiteaApi = void 0;
+__webpack_unused_export__ = ({ value: true });
+__webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = __webpack_unused_export__ = exports.MS = exports.D9 = void 0;
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
 var GiteaApi_1 = __nccwpck_require__(1402);
-Object.defineProperty(exports, "GiteaApi", ({ enumerable: true, get: function () { return GiteaApi_1.GiteaApi; } }));
+Object.defineProperty(exports, "D9", ({ enumerable: true, get: function () { return GiteaApi_1.GiteaApi; } }));
 var ApiError_1 = __nccwpck_require__(9624);
-Object.defineProperty(exports, "ApiError", ({ enumerable: true, get: function () { return ApiError_1.ApiError; } }));
+Object.defineProperty(exports, "MS", ({ enumerable: true, get: function () { return ApiError_1.ApiError; } }));
 var BaseHttpRequest_1 = __nccwpck_require__(3076);
-Object.defineProperty(exports, "BaseHttpRequest", ({ enumerable: true, get: function () { return BaseHttpRequest_1.BaseHttpRequest; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return BaseHttpRequest_1.BaseHttpRequest; } });
 var CancelablePromise_1 = __nccwpck_require__(737);
-Object.defineProperty(exports, "CancelablePromise", ({ enumerable: true, get: function () { return CancelablePromise_1.CancelablePromise; } }));
-Object.defineProperty(exports, "CancelError", ({ enumerable: true, get: function () { return CancelablePromise_1.CancelError; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return CancelablePromise_1.CancelablePromise; } });
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return CancelablePromise_1.CancelError; } });
 var OpenAPI_1 = __nccwpck_require__(1455);
-Object.defineProperty(exports, "OpenAPI", ({ enumerable: true, get: function () { return OpenAPI_1.OpenAPI; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return OpenAPI_1.OpenAPI; } });
 var CreateHookOption_1 = __nccwpck_require__(3275);
-Object.defineProperty(exports, "CreateHookOption", ({ enumerable: true, get: function () { return CreateHookOption_1.CreateHookOption; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return CreateHookOption_1.CreateHookOption; } });
 var CreateMilestoneOption_1 = __nccwpck_require__(1646);
-Object.defineProperty(exports, "CreateMilestoneOption", ({ enumerable: true, get: function () { return CreateMilestoneOption_1.CreateMilestoneOption; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return CreateMilestoneOption_1.CreateMilestoneOption; } });
 var CreateOrgOption_1 = __nccwpck_require__(9219);
-Object.defineProperty(exports, "CreateOrgOption", ({ enumerable: true, get: function () { return CreateOrgOption_1.CreateOrgOption; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return CreateOrgOption_1.CreateOrgOption; } });
 var CreateRepoOption_1 = __nccwpck_require__(2683);
-Object.defineProperty(exports, "CreateRepoOption", ({ enumerable: true, get: function () { return CreateRepoOption_1.CreateRepoOption; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return CreateRepoOption_1.CreateRepoOption; } });
 var CreateTeamOption_1 = __nccwpck_require__(2573);
-Object.defineProperty(exports, "CreateTeamOption", ({ enumerable: true, get: function () { return CreateTeamOption_1.CreateTeamOption; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return CreateTeamOption_1.CreateTeamOption; } });
 var EditOrgOption_1 = __nccwpck_require__(7679);
-Object.defineProperty(exports, "EditOrgOption", ({ enumerable: true, get: function () { return EditOrgOption_1.EditOrgOption; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return EditOrgOption_1.EditOrgOption; } });
 var EditTeamOption_1 = __nccwpck_require__(6398);
-Object.defineProperty(exports, "EditTeamOption", ({ enumerable: true, get: function () { return EditTeamOption_1.EditTeamOption; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return EditTeamOption_1.EditTeamOption; } });
 var MergePullRequestOption_1 = __nccwpck_require__(7403);
-Object.defineProperty(exports, "MergePullRequestOption", ({ enumerable: true, get: function () { return MergePullRequestOption_1.MergePullRequestOption; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return MergePullRequestOption_1.MergePullRequestOption; } });
 var MigrateRepoOptions_1 = __nccwpck_require__(7744);
-Object.defineProperty(exports, "MigrateRepoOptions", ({ enumerable: true, get: function () { return MigrateRepoOptions_1.MigrateRepoOptions; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return MigrateRepoOptions_1.MigrateRepoOptions; } });
 var Team_1 = __nccwpck_require__(6914);
-Object.defineProperty(exports, "Team", ({ enumerable: true, get: function () { return Team_1.Team; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return Team_1.Team; } });
 var AdminService_1 = __nccwpck_require__(1859);
-Object.defineProperty(exports, "AdminService", ({ enumerable: true, get: function () { return AdminService_1.AdminService; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return AdminService_1.AdminService; } });
 var IssueService_1 = __nccwpck_require__(5868);
-Object.defineProperty(exports, "IssueService", ({ enumerable: true, get: function () { return IssueService_1.IssueService; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return IssueService_1.IssueService; } });
 var MiscellaneousService_1 = __nccwpck_require__(3446);
-Object.defineProperty(exports, "MiscellaneousService", ({ enumerable: true, get: function () { return MiscellaneousService_1.MiscellaneousService; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return MiscellaneousService_1.MiscellaneousService; } });
 var NotificationService_1 = __nccwpck_require__(8167);
-Object.defineProperty(exports, "NotificationService", ({ enumerable: true, get: function () { return NotificationService_1.NotificationService; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return NotificationService_1.NotificationService; } });
 var OrganizationService_1 = __nccwpck_require__(9332);
-Object.defineProperty(exports, "OrganizationService", ({ enumerable: true, get: function () { return OrganizationService_1.OrganizationService; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return OrganizationService_1.OrganizationService; } });
 var PackageService_1 = __nccwpck_require__(4855);
-Object.defineProperty(exports, "PackageService", ({ enumerable: true, get: function () { return PackageService_1.PackageService; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return PackageService_1.PackageService; } });
 var RepositoryService_1 = __nccwpck_require__(3594);
-Object.defineProperty(exports, "RepositoryService", ({ enumerable: true, get: function () { return RepositoryService_1.RepositoryService; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return RepositoryService_1.RepositoryService; } });
 var SettingsService_1 = __nccwpck_require__(6011);
-Object.defineProperty(exports, "SettingsService", ({ enumerable: true, get: function () { return SettingsService_1.SettingsService; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return SettingsService_1.SettingsService; } });
 var UserService_1 = __nccwpck_require__(4842);
-Object.defineProperty(exports, "UserService", ({ enumerable: true, get: function () { return UserService_1.UserService; } }));
+__webpack_unused_export__ = ({ enumerable: true, get: function () { return UserService_1.UserService; } });
 
 
 /***/ }),
@@ -33023,8 +33024,6 @@ var __webpack_exports__ = {};
 
 async function run() {
   try {
-    console.log(_actions_core__WEBPACK_IMPORTED_MODULE_2__)
-    console.log(gitea_api__WEBPACK_IMPORTED_MODULE_3__)
     const server_url = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput("server_url")
     const name = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput("name")
     const body = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput("body")
@@ -33037,7 +33036,7 @@ async function run() {
 
     const [owner, repo] = (repository).split("/")
 
-    const gitea_client = new gitea_api__WEBPACK_IMPORTED_MODULE_3__.GiteaApi({
+    const gitea_client = new gitea_api__WEBPACK_IMPORTED_MODULE_3__/* .GiteaApi */ .D9({
       BASE: `${server_url}/api/v1`,
       WITH_CREDENTIALS: true,
       TOKEN: token,
@@ -33080,7 +33079,7 @@ async function createOrGetRelease(client, owner, repo, body) {
     })
     return release
   } catch (error) {
-    if (!(error instanceof gitea_api__WEBPACK_IMPORTED_MODULE_3__.ApiError) || error.status !== 404) {
+    if (!(error instanceof gitea_api__WEBPACK_IMPORTED_MODULE_3__/* .ApiError */ .MS) || error.status !== 404) {
       throw error
     }
   }
