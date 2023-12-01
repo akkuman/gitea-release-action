@@ -8,6 +8,8 @@ import path from 'path'
 
 async function run() {
   try {
+    console.log(core)
+    console.log(gitea)
     const server_url = core.getInput("server_url")
     const name = core.getInput("name")
     const body = core.getInput("body")
