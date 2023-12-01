@@ -33267,6 +33267,7 @@ async function run() {
     await uploadFiles(gitea_client, owner, repo, response.id, all_files)
     console.log(`🎉 Release ready at ${response.html_url}`);
   } catch (error) {
+    console.log(error);
     _actions_core__WEBPACK_IMPORTED_MODULE_2___default().setFailed(error.message);
   }
 }

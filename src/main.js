@@ -41,6 +41,7 @@ async function run() {
     await uploadFiles(gitea_client, owner, repo, response.id, all_files)
     console.log(`🎉 Release ready at ${response.html_url}`);
   } catch (error) {
+    console.log(error);
     core.setFailed(error.message);
   }
 }
