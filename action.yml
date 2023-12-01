@@ -1,0 +1,43 @@
+---
+name: gitea-release-action
+description: "An action to support publishing release to Gitea."
+author: "Akkuman"
+inputs:
+  server_url:
+    description: the base url of the gitea API
+    required: false
+    default: ${{ github.server_url }}
+  body:
+    description: "Note-worthy description of changes in release"
+    required: false
+  name:
+    description: "Gives the release a custom name. Defaults to tag name"
+    required: false
+    default: ${{ github.ref_name }}
+  tag_name:
+    description: "Gives a tag name. Defaults to github.GITHUB_REF"
+    required: false
+    default: ${{ github.ref_name }}
+  draft:
+    description: "Creates a draft release. Defaults to false"
+    required: false
+  prerelease:
+    description: "Identify the release as a prerelease. Defaults to false"
+    required: false
+  files:
+    description: "Newline-delimited list of path globs for asset files to upload"
+    required: false
+  repository:
+    description: "Repository to make releases against, in <owner>/<repo> format"
+    required: false
+    default: ${{ github.repository }}
+  token:
+    description: "Gitea Token"
+    required: false
+    default: ${{ github.token }}
+runs:
+  using: "node16"
+  main: "dist/index.js"
+branding:
+  color: "green"
+  icon: "package"
