@@ -22,7 +22,7 @@ The following are optional as `step.with` keys
 ## Example usage
 
 ```yaml
-uses: akkuman/gitea-release-action@v1.0.0
+uses: akkuman/gitea-release-action@v1
 env:
   NODE_OPTIONS: '--experimental-fetch' # if nodejs < 18
 with:
