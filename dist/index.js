@@ -40971,7 +40971,7 @@ async function createOrGetRelease(client, owner, repo, body) {
 function paths(patterns) {
   return patterns.reduce((acc, pattern) => {
     return acc.concat(
-      sync(pattern).filter((path) => statSync(path).isFile())
+      sync(pattern).filter((path) => external_fs_.statSync(path).isFile())
     );
   }, []);
 };

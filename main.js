@@ -84,7 +84,7 @@ async function createOrGetRelease(client, owner, repo, body) {
 function paths(patterns) {
   return patterns.reduce((acc, pattern) => {
     return acc.concat(
-      glob.sync(pattern).filter((path) => statSync(path).isFile())
+      glob.sync(pattern).filter((path) => fs.statSync(path).isFile())
     );
   }, []);
 };
