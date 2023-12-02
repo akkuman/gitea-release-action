@@ -1,5 +1,6 @@
 import fs from "fs";
 import { Blob } from "buffer";
+import * as glob from "glob";
 
 import core from "@actions/core";
 
