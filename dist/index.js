@@ -41001,17 +41001,17 @@ async function uploadFiles(client, owner, repo, release_id, all_files) {
         })
         console.log(`Successfully deleted old release attachment ${attachment.name}`)
       }
-      const content = external_fs_.readFileSync(filepath);
-      const blob = new external_buffer_.Blob([content]);
-      await client.repository.repoCreateReleaseAttachment({
-        owner: owner,
-        repo: repo,
-        id: release_id,
-        attachment: blob,
-        name: external_path_.basename(filepath),
-      })
-      console.log(`Successfully uploaded release attachment ${filepath}`)
     }
+    const content = external_fs_.readFileSync(filepath);
+    const blob = new external_buffer_.Blob([content]);
+    await client.repository.repoCreateReleaseAttachment({
+      owner: owner,
+      repo: repo,
+      id: release_id,
+      attachment: blob,
+      name: external_path_.basename(filepath),
+    })
+    console.log(`Successfully uploaded release attachment ${filepath}`)
   }
 }
 

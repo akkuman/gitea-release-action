@@ -114,17 +114,17 @@ async function uploadFiles(client, owner, repo, release_id, all_files) {
         })
         console.log(`Successfully deleted old release attachment ${attachment.name}`)
       }
-      const content = fs.readFileSync(filepath);
-      const blob = new Blob([content]);
-      await client.repository.repoCreateReleaseAttachment({
-        owner: owner,
-        repo: repo,
-        id: release_id,
-        attachment: blob,
-        name: path.basename(filepath),
-      })
-      console.log(`Successfully uploaded release attachment ${filepath}`)
     }
+    const content = fs.readFileSync(filepath);
+    const blob = new Blob([content]);
+    await client.repository.repoCreateReleaseAttachment({
+      owner: owner,
+      repo: repo,
+      id: release_id,
+      attachment: blob,
+      name: path.basename(filepath),
+    })
+    console.log(`Successfully uploaded release attachment ${filepath}`)
   }
 }
 
