@@ -40990,8 +40990,8 @@ async function uploadFiles(client, owner, repo, release_id, all_files) {
     repo: repo,
     id: release_id,
   })
-  for (const filepath in all_files) {
-    for (const attachment in attachments) {
+  for (const filepath of all_files) {
+    for (const attachment of attachments) {
       if (attachment.name === external_path_.basename(filepath)) {
         await client.repository.repoDeleteReleaseAttachment({
           owner: owner,
