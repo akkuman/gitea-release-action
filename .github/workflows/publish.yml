@@ -33,4 +33,5 @@ jobs:
       - id: get_version
         uses: battila7/get-version-action@v2
       - run: git tag -f "v${{ steps.get_version.outputs.major }}"
-      - run: git push -f --follow-tags
+      - run: git push
+      - run: git push --tags -f
