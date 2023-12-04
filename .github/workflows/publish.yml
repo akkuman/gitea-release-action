@@ -17,6 +17,7 @@ jobs:
           node-version: 16
           cache: 'npm'
           cache-dependency-path: package-lock.json
+      - run: npm install -D
       - run: npm run package
       - run: |
           git config user.name github-actions
