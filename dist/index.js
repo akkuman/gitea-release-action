@@ -40898,7 +40898,7 @@ async function run() {
   try {
     const server_url = core.getInput("server_url")
     const name = core.getInput("name")
-    const body = core.getInput("body")
+    const body = getReleaseBody(core.getInput("body"), core.getInput("body_path"))
     const tag_name = core.getInput("tag_name")
     const draft = Boolean(core.getInput("draft"))
     const prerelease = Boolean(core.getInput("prerelease"))
@@ -41015,7 +41015,13 @@ async function uploadFiles(client, owner, repo, release_id, all_files) {
   }
 }
 
-run();
+function getReleaseBody(body, body_path) {
+  return (
+    (body_path && external_fs_.readFileSync(body_path).toString("utf8")) || body
+  )
+}
+
+run()
 
 })();
 
