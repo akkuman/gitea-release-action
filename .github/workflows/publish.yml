@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: 'main'
       - uses: actions/setup-node@v4
         with:
           node-version: 16
