@@ -1,37 +1,30 @@
-name: Build and Publish
-
-permissions:
-  contents: write
+name: Update Main Version
+run-name: Move ${{ github.event.inputs.major_version }} to ${{ github.event.inputs.target }}
 
 on:
-  push:
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+    inputs:
+      target:
+        description: The tag or reference to use
+        required: true
+      major_version:
+        type: choice
+        description: The major version to update
+        options:
+          - v1
 
 jobs:
-  build:
+  tag:
     runs-on: ubuntu-latest
-    name: 构建
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: 'main'
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 16
-          cache: 'npm'
-          cache-dependency-path: package-lock.json
-      - run: npm install -D
-      - run: npm run package
-      - run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-      - run: |
-          git add .
-          git commit -m "Auto Build"
-      - id: get_version
-        uses: battila7/get-version-action@v2
-      - run: git tag -f "v${{ steps.get_version.outputs.major }}"
-      - run: git push
-      - run: git push --tags -f
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Git config
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+    - name: Tag new target
+      run: git tag -f ${{ github.event.inputs.major_version }} ${{ github.event.inputs.target }}
+    - name: Push new tag
+      run: git push origin ${{ github.event.inputs.major_version }} --force
