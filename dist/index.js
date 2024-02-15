@@ -40996,7 +40996,7 @@ async function uploadFiles(client, owner, repo, release_id, all_files) {
         await client.repository.repoDeleteReleaseAttachment({
           owner: owner,
           repo: repo,
-          id: id,
+          id: release_id,
           attachmentId: attachment.id,
         })
         console.log(`Successfully deleted old release attachment ${attachment.name}`)
