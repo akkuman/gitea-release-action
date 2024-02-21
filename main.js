@@ -129,6 +129,7 @@ function paths(patterns) {
  * @param {String} repo 
  * @param {Number} release_id 
  * @param {Array<String>} all_files 
+ * @param {Map<String, Any>} additional parameters
  */
 async function uploadFiles(client, owner, repo, release_id, all_files, params) {
   params = params || {};
