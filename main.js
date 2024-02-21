@@ -5,7 +5,7 @@ import * as glob from "glob";
 import core from "@actions/core";
 
 import gitea from "gitea-api";
-import path from 'path'
+import path from 'path';
 
 async function run() {
   try {
@@ -80,7 +80,7 @@ async function createOrGetRelease(client, owner, repo, body) {
         name: body.name || release.name,
         prerelease: body.prerelease !== undefined ? body.prerelease : release.prerelease,
         tag_name: body.tag_name || release.tag_name,
-        target_commitish: body.target_commitish || release.target_commitish,
+        target_commitish: target_commitish,
       }
     })
     return release
