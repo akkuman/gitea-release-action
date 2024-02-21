@@ -35,6 +35,9 @@ inputs:
     description: "Gitea Token"
     required: false
     default: ${{ github.token }}
+  target_commitish:
+    description: 'Commitish value that determines where the Git tag is created from. Can be any branch or commit SHA.'
+    required: false
 runs:
   using: "node16"
   main: "dist/index.js"

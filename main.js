@@ -18,6 +18,7 @@ async function run() {
     const files = core.getInput("files")
     const repository = core.getInput("repository")
     const token = core.getInput("token")
+    const target_commitish = core.getInput("target_commitish")
 
     const [owner, repo] = (repository).split("/")
 
@@ -33,6 +34,7 @@ async function run() {
       name: name,
       prerelease: prerelease,
       tag_name: tag_name,
+      target_commitish: target_commitish,
     })
     const file_patterns = files.split('\n')
     const all_files = paths(file_patterns);
@@ -62,12 +64,36 @@ async function createOrGetRelease(client, owner, repo, body) {
       repo: repo,
       tag: body.tag_name,
     })
+    const release_id = release.id;
+    let target_commitish = release.target_commitish;
+    if (body.target_commitish && body.target_commitish !== release.target_commitish) {
+      console.log(`Updating commit from "${release.target_commitish}" to "${body.target_commitish}"`);
+    }
+    target_commitish = body.target_commitish;
+    release = client.repository.repoEditRelease({
+      owner: owner,
+      repo: repo,
+      id: release_id,
+      body: {
+        body: body.body || release.body,
+        draft: body.draft !== undefined ? body.draft : release.draft,
+        name: body.name || release.name,
+        prerelease: body.prerelease !== undefined ? body.prerelease : release.prerelease,
+        tag_name: body.tag_name || release.tag_name,
+        target_commitish: body.target_commitish || release.target_commitish,
+      }
+    })
     return release
   } catch (error) {
     if (!(error instanceof gitea.ApiError) || error.status !== 404) {
       throw error
     }
   }
+  let commit_message = "";
+  if (body.target_commitish) {
+    commit_message = ` using commit "${body.target_commitish}"`;
+  }
+  console.log(`👩‍🏭 Creating new GitHub release for tag ${body.tag_name}${commit_message}...`);
   let release = await client.repository.repoCreateRelease({
     owner: owner,
     repo: repo,
