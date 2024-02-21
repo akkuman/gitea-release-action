@@ -12,13 +12,15 @@ The following are optional as `step.with` keys
 | `body`             | String  | Text communicating notable changes in this release                                                  |
 | `body_path`        | String  | Path to load text communicating notable changes in this release                                     |
 | `draft`            | Boolean | Creates a draft release. Defaults to false                                                          |
-| `prerelease`       | Boolean | Indicator of whether or not is a prerelease                                                         |
+| `prerelease`       | Boolean | Indicator of whether or not is a prerelease. Defaults to false                                      |
 | `files`            | String  | Newline-delimited globs of paths to assets to upload for release                                    |
 | `name`             | String  | Name of the release. Defaults to tag name                                                           |
 | `tag_name`         | String  | Name of a tag. Defaults to `github.ref_name`                                                        |
 | `repository`       | String  | Name of a target repository in `<owner>/<repo>` format. Defaults to `github.repository`             |
 | `token`            | String  | Gitea Token. Defaults to `${{ github.token }}`                                                      |
 | `target_commitish` | String  | Commitish value that determines where the Git tag is created from. Can be any branch or commit SHA. |
+| `md5sum`           | Boolean | Publish .md5 along with artifacts, Defaults to false                                                 |
+| `sha256sum`        | Boolean | Publish .md5 along with artifacts, Defaults to false                                                 |
 
 ## Example usage
 
@@ -38,3 +40,4 @@ If you want to ignore ssl verify error, you can set env `NODE_TLS_REJECT_UNAUTHO
 - [softprops/action-gh-release: 📦 GitHub Action for creating GitHub Releases](https://github.com/softprops/action-gh-release)
 - [sigyl-actions/gitea-action-release-asset](https://github.com/sigyl-actions/gitea-action-release-asset)
 - [actions/release-action: An action written by Golang to support publishing release to Gitea(not Github Actions compatible) - release-action - Gitea: Git with a cup of tea](https://gitea.com/actions/release-action)
+- [wangyoucao577/go-release-action: Automatically publish Go binaries to Github Release Assets through Github Action.](https://github.com/wangyoucao577/go-release-action)

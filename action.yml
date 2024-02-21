@@ -38,6 +38,12 @@ inputs:
   target_commitish:
     description: 'Commitish value that determines where the Git tag is created from. Can be any branch or commit SHA.'
     required: false
+  md5sum:
+    description: 'Publish `.md5` along with artifacts.'
+    required: false
+  sha256sum:
+    description: 'Publish `.sha256` along with artifacts.'
+    required: false
 runs:
   using: "node16"
   main: "dist/index.js"

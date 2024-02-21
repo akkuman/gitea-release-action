@@ -6,6 +6,8 @@ import core from "@actions/core";
 
 import gitea from "gitea-api";
 import path from 'path';
+import CryptoJS from 'crypto-js';
+
 
 async function run() {
   try {
@@ -19,6 +21,8 @@ async function run() {
     const repository = core.getInput("repository")
     const token = core.getInput("token")
     const target_commitish = core.getInput("target_commitish")
+    const md5sum = core.getInput("md5sum")
+    const sha256sum = core.getInput("sha256sum")
 
     const [owner, repo] = (repository).split("/")
 
@@ -41,7 +45,10 @@ async function run() {
     if (all_files.length == 0) {
       console.warn(`${file_patterns} not include valid file.`);
     }
-    await uploadFiles(gitea_client, owner, repo, response.id, all_files)
+    await uploadFiles(gitea_client, owner, repo, response.id, all_files, {
+      md5sum: md5sum,
+      sha256sum: sha256sum,
+    })
     console.log(`🎉 Release ready at ${response.html_url}`);
   } catch (error) {
     console.log(error);
@@ -123,7 +130,8 @@ function paths(patterns) {
  * @param {Number} release_id 
  * @param {Array<String>} all_files 
  */
-async function uploadFiles(client, owner, repo, release_id, all_files) {
+async function uploadFiles(client, owner, repo, release_id, all_files, params) {
+  params = params || {};
   const attachments = await client.repository.repoListReleaseAttachments({
     owner: owner,
     repo: repo,
@@ -131,7 +139,8 @@ async function uploadFiles(client, owner, repo, release_id, all_files) {
   })
   for (const filepath of all_files) {
     for (const attachment of attachments) {
-      if (attachment.name === path.basename(filepath)) {
+      let will_deleted = [path.basename(filepath), `${path.basename(filepath)}.md5`, `${path.basename(filepath)}.sha256`]
+      if (will_deleted.includes(attachment.name)) {
         await client.repository.repoDeleteReleaseAttachment({
           owner: owner,
           repo: repo,
@@ -142,7 +151,7 @@ async function uploadFiles(client, owner, repo, release_id, all_files) {
       }
     }
     const content = fs.readFileSync(filepath);
-    const blob = new Blob([content]);
+    let blob = new Blob([content]);
     await client.repository.repoCreateReleaseAttachment({
       owner: owner,
       repo: repo,
@@ -150,6 +159,30 @@ async function uploadFiles(client, owner, repo, release_id, all_files) {
       attachment: blob,
       name: path.basename(filepath),
     })
+    if (params.md5sum) {
+      let wordArray = CryptoJS.lib.WordArray.create(content);
+      let hash = CryptoJS.MD5(wordArray).toString();
+      blob = new Blob([hash], { type : 'plain/text' });
+      await client.repository.repoCreateReleaseAttachment({
+        owner: owner,
+        repo: repo,
+        id: release_id,
+        attachment: blob,
+        name: `${path.basename(filepath)}.md5`,
+      })
+    }
+    if (params.sha256sum) {
+      let wordArray = CryptoJS.lib.WordArray.create(content);
+      let hash = CryptoJS.SHA256(wordArray).toString();
+      blob = new Blob([hash], { type : 'plain/text' });
+      await client.repository.repoCreateReleaseAttachment({
+        owner: owner,
+        repo: repo,
+        id: release_id,
+        attachment: blob,
+        name: `${path.basename(filepath)}.sha256`,
+      })
+    }
     console.log(`Successfully uploaded release attachment ${filepath}`)
   }
 }
