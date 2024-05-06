@@ -48144,6 +48144,10 @@ var crypto_js = __nccwpck_require__(4134);
 
 
 
+function getIsTrue(v) {
+    const trueValue = ['true', 'True', 'TRUE']
+    return trueValue.includes(v)
+}
 
 async function run() {
   try {
@@ -48151,14 +48155,14 @@ async function run() {
     const name = core.getInput("name")
     const body = getReleaseBody(core.getInput("body"), core.getInput("body_path"))
     const tag_name = core.getInput("tag_name")
-    const draft = core.getInput("draft") === 'true'
-    const prerelease = core.getInput("prerelease") === 'true'
+    const draft = getIsTrue(core.getInput("draft"))
+    const prerelease = getIsTrue(core.getInput("prerelease"))
     const files = core.getInput("files")
     const repository = core.getInput("repository")
     const token = core.getInput("token")
     const target_commitish = core.getInput("target_commitish")
-    const md5sum = core.getInput("md5sum")
-    const sha256sum = core.getInput("sha256sum")
+    const md5sum = getIsTrue(core.getInput("md5sum"))
+    const sha256sum = getIsTrue(core.getInput("sha256sum"))
 
     const [owner, repo] = (repository).split("/")
 
