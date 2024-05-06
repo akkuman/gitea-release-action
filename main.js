@@ -15,8 +15,8 @@ async function run() {
     const name = core.getInput("name")
     const body = getReleaseBody(core.getInput("body"), core.getInput("body_path"))
     const tag_name = core.getInput("tag_name")
-    const draft = Boolean(core.getInput("draft"))
-    const prerelease = Boolean(core.getInput("prerelease"))
+    const draft = core.getInput("draft") === 'true'
+    const prerelease = core.getInput("prerelease") === 'true'
     const files = core.getInput("files")
     const repository = core.getInput("repository")
     const token = core.getInput("token")
