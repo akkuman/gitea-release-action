@@ -142,6 +142,7 @@ async function uploadFiles(client, owner, repo, release_id, all_files, params) {
     repo: repo,
     id: release_id,
   })
+  // deleted old release attachment
   for (const filepath of all_files) {
     for (const attachment of attachments) {
       let will_deleted = [path.basename(filepath), `${path.basename(filepath)}.md5`, `${path.basename(filepath)}.sha256`]
@@ -155,6 +156,9 @@ async function uploadFiles(client, owner, repo, release_id, all_files, params) {
         console.log(`Successfully deleted old release attachment ${attachment.name}`)
       }
     }
+  }
+  // upload new release attachment
+  for (const filepath of all_files) {
     const content = fs.readFileSync(filepath);
     let blob = new Blob([content]);
     await client.repository.repoCreateReleaseAttachment({
