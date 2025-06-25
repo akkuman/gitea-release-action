@@ -48279,18 +48279,25 @@ async function uploadFiles(client, owner, repo, release_id, all_files, params) {
     id: release_id,
   })
   // deleted old release attachment
+  const will_deleted = new Set();
   for (const filepath of all_files) {
-    for (const attachment of attachments) {
-      let will_deleted = [external_path_.basename(filepath), `${external_path_.basename(filepath)}.md5`, `${external_path_.basename(filepath)}.sha256`]
-      if (will_deleted.includes(attachment.name)) {
-        await client.repository.repoDeleteReleaseAttachment({
-          owner: owner,
-          repo: repo,
-          id: release_id,
-          attachmentId: attachment.id,
-        })
-        console.log(`Successfully deleted old release attachment ${attachment.name}`)
-      }
+    will_deleted.add(external_path_.basename(filepath));
+    if (params.md5sum) {
+      will_deleted.add(`${external_path_.basename(filepath)}.md5`);
+    }
+    if (params.sha256sum) {
+      will_deleted.add(`${external_path_.basename(filepath)}.sha256`);
+    }
+  }
+  for (const attachment of attachments) {
+    if (will_deleted.has(attachment.name)) {
+      await client.repository.repoDeleteReleaseAttachment({
+        owner: owner,
+        repo: repo,
+        id: release_id,
+        attachmentId: attachment.id,
+      })
+      console.log(`Successfully deleted old release attachment ${attachment.name}`)
     }
   }
   // upload new release attachment
