@@ -1,7 +1,7 @@
 ---
 name: gitea-release-action
 description: "An action to support publishing release to Gitea."
-author: "Akkuman"
+author: "Grypho"
 inputs:
   server_url:
     description: the base url of the gitea API
@@ -10,7 +10,7 @@ inputs:
   body:
     description: "Note-worthy description of changes in release"
     required: false
-    default: ${{ github.release.body }}
+    default: ${{ github.release.body != '' &&   github.release.body || null }}
   body_path:
     description: "Path to load description of changes in this release"
     required: false
