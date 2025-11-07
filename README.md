@@ -2,6 +2,8 @@
 
 An action to support publishing release to Gitea.
 
+Preserves the fields body, prerelease and name when pushing the release if no value is given.
+
 ## Inputs
 
 The following are optional as `step.with` keys

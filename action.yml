@@ -1,7 +1,7 @@
 ---
 name: gitea-release-action
 description: "An action to support publishing release to Gitea."
-author: "Akkuman"
+author: "Grypho"
 inputs:
   server_url:
     description: the base url of the gitea API
