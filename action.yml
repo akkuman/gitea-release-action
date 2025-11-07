@@ -1,7 +1,7 @@
 ---
 name: gitea-release-action
 description: "An action to support publishing release to Gitea."
-author: "Akkuman"
+author: "Grypho"
 inputs:
   server_url:
     description: the base url of the gitea API
@@ -10,13 +10,14 @@ inputs:
   body:
     description: "Note-worthy description of changes in release"
     required: false
+    default: ${{ github.release.body != '' &&   github.release.body || null }}
   body_path:
     description: "Path to load description of changes in this release"
     required: false
   name:
     description: "Gives the release a custom name. Defaults to tag name"
     required: false
-    default: ${{ github.ref_name }}
+    default: ${{ github.event.release.name }}
   tag_name:
     description: "Gives a tag name. Defaults to github.GITHUB_REF"
     required: false
@@ -27,6 +28,7 @@ inputs:
   prerelease:
     description: "Identify the release as a prerelease. Defaults to false"
     required: false
+    default: ${{ github.event.release.prerelease }}
   files:
     description: "Newline-delimited list of path globs for asset files to upload"
     required: false

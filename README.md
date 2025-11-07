@@ -2,6 +2,8 @@
 
 An action to support publishing release to Gitea.
 
+Preserves the fields body, prerelease and name when pushing the release if no value is given.
+
 ## Inputs
 
 The following are optional as `step.with` keys
@@ -25,7 +27,7 @@ The following are optional as `step.with` keys
 ## Example usage
 
 ```yaml
-uses: akkuman/gitea-release-action@v1
+uses: grypho/gitea-release-action@v1.1
 env:
   NODE_OPTIONS: '--experimental-fetch' # if nodejs < 18
 with:
@@ -41,3 +43,4 @@ If you want to ignore ssl verify error, you can set env `NODE_TLS_REJECT_UNAUTHO
 - [sigyl-actions/gitea-action-release-asset](https://github.com/sigyl-actions/gitea-action-release-asset)
 - [actions/release-action: An action written by Golang to support publishing release to Gitea(not Github Actions compatible) - release-action - Gitea: Git with a cup of tea](https://gitea.com/actions/release-action)
 - [wangyoucao577/go-release-action: Automatically publish Go binaries to Github Release Assets through Github Action.](https://github.com/wangyoucao577/go-release-action)
+- [akkuman/gitea-release-action: Base of this fork.](https://github.com/akkuman/gitea-release-action)
