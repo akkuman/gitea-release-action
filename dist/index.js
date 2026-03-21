@@ -48170,6 +48170,7 @@ async function run() {
       BASE: `${server_url}/api/v1`,
       WITH_CREDENTIALS: true,
       TOKEN: token,
+      ENCODE_PATH: encodeURIComponent,
     });
 
     const response = await createOrGetRelease(gitea_client, owner, repo, {
@@ -48210,7 +48211,7 @@ async function createOrGetRelease(client, owner, repo, body) {
     let release = await client.repository.repoGetReleaseByTag({
       owner: owner,
       repo: repo,
-      tag: encodeURIComponent(body.tag_name),
+      tag: body.tag_name,
     })
     const release_id = release.id;
     let target_commitish = release.target_commitish;
