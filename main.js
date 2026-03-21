@@ -70,7 +70,7 @@ async function run() {
  */
 async function createOrGetRelease(client, owner, repo, body) {
   try {
-    console.log(`Checking for existing release at ${encodeURIComponent(body.tag)}`);
+    console.log(`Checking for existing release at ${encodeURIComponent(body.tag_name)}`);
     let release = await client.repository.repoGetReleaseByTag({
       owner: owner,
       repo: repo,
