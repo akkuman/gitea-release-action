@@ -48206,10 +48206,11 @@ async function run() {
  */
 async function createOrGetRelease(client, owner, repo, body) {
   try {
+    console.log(`Checking for existing release at ${encodeURIComponent(body.tag)}`);
     let release = await client.repository.repoGetReleaseByTag({
       owner: owner,
       repo: repo,
-      tag: body.tag_name,
+      tag: encodeURIComponent(body.tag_name),
     })
     const release_id = release.id;
     let target_commitish = release.target_commitish;
