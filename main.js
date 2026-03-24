@@ -133,7 +133,8 @@ async function createStreamableFile(fpath) {
   const { size } = await handle.stat();
 
   const file = new File([], name);
-  file.stream = () => handle.readableWebStream({autoClose: true});
+  file.stream = () => handle.readableWebStream();
+  file.close = async () => await handle?.close();
 
   // Set correct size otherwise, fetch will encounter UND_ERR_REQ_CONTENT_LENGTH_MISMATCH
   Object.defineProperty(file, 'size', { get: () => size });
@@ -236,6 +237,7 @@ async function uploadFiles(client, owner, repo, release_id, all_files, params) {
       attachment: curfile,
       name: path.basename(filepath),
     })
+    await curfile.close();
     let algorithms = [];
     if (params.md5sum) {
       algorithms = algorithms.concat('md5');
@@ -247,6 +249,7 @@ async function uploadFiles(client, owner, repo, release_id, all_files, params) {
     if (algorithms.length !== 0) {
       curfile = await createStreamableFile(filepath)
       hashes = await calculateMultipleHashes(curfile, algorithms)
+      await curfile.close();
     }
     if (params.md5sum) {
       let hash = hashes.md5;
