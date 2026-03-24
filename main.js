@@ -128,17 +128,17 @@ function paths(patterns) {
 };
 
 async function createStreamableFile(fpath) {
-    const name = path.basename(fpath);
-    const handle = await asyncfs.open(fpath);
-    const { size } = await handle.stat();
+  const name = path.basename(fpath);
+  const handle = await asyncfs.open(fpath);
+  const { size } = await handle.stat();
 
-    const file = new File([], name);
-    file.stream = () => handle.readableWebStream();
+  const file = new File([], name);
+  file.stream = () => handle.readableWebStream({autoClose: true});
 
-    // Set correct size otherwise, fetch will encounter UND_ERR_REQ_CONTENT_LENGTH_MISMATCH
-    Object.defineProperty(file, 'size', { get: () => size });
+  // Set correct size otherwise, fetch will encounter UND_ERR_REQ_CONTENT_LENGTH_MISMATCH
+  Object.defineProperty(file, 'size', { get: () => size });
 
-    return file;
+  return file;
 }
 
 

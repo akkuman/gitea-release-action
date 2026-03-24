@@ -48266,17 +48266,17 @@ function paths(patterns) {
 };
 
 async function createStreamableFile(fpath) {
-    const name = external_path_.basename(fpath);
-    const handle = await promises_namespaceObject.open(fpath);
-    const { size } = await handle.stat();
+  const name = external_path_.basename(fpath);
+  const handle = await promises_namespaceObject.open(fpath);
+  const { size } = await handle.stat();
 
-    const file = new external_buffer_.File([], name);
-    file.stream = () => handle.readableWebStream();
+  const file = new external_buffer_.File([], name);
+  file.stream = () => handle.readableWebStream({autoClose: true});
 
-    // Set correct size otherwise, fetch will encounter UND_ERR_REQ_CONTENT_LENGTH_MISMATCH
-    Object.defineProperty(file, 'size', { get: () => size });
+  // Set correct size otherwise, fetch will encounter UND_ERR_REQ_CONTENT_LENGTH_MISMATCH
+  Object.defineProperty(file, 'size', { get: () => size });
 
-    return file;
+  return file;
 }
 
 
