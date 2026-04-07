@@ -1,5 +1,6 @@
+import asyncfs from "node:fs/promises";
 import fs from "fs";
-import { Blob } from "buffer";
+import { Blob, File } from "buffer";
 import * as glob from "glob";
 
 import core from "@actions/core";
@@ -128,6 +129,68 @@ function paths(patterns) {
   }, []);
 };
 
+async function createStreamableFile(fpath) {
+  const name = path.basename(fpath);
+  const handle = await asyncfs.open(fpath);
+  const { size } = await handle.stat();
+
+  const file = new File([], name);
+  file.stream = () => handle.readableWebStream();
+  file.close = async () => await handle?.close();
+
+  // Set correct size otherwise, fetch will encounter UND_ERR_REQ_CONTENT_LENGTH_MISMATCH
+  Object.defineProperty(file, 'size', { get: () => size });
+
+  return file;
+}
+
+
+async function calculateMultipleHashes(file, algorithms = ['md5', 'sha256']) {
+    const stream = file.stream();
+    const reader = stream.getReader();
+
+    const hashers = algorithms.map(alg => {
+        switch(alg.toLowerCase()) {
+            case 'md5':
+                return { name: 'md5', instance: CryptoJS.algo.MD5.create() };
+            case 'sha1':
+                return { name: 'sha1', instance: CryptoJS.algo.SHA1.create() };
+            case 'sha256':
+                return { name: 'sha256', instance: CryptoJS.algo.SHA256.create() };
+            case 'sha512':
+                return { name: 'sha512', instance: CryptoJS.algo.SHA512.create() };
+            default:
+                throw new Error(`not support hash: ${alg}`);
+        }
+    });
+    
+    try {
+        while (true) {
+            const { done, value } = await reader.read();
+            
+            if (done) {
+                break;
+            }
+            
+            const wordArray = CryptoJS.lib.WordArray.create(value);
+
+            hashers.forEach(hasher => {
+                hasher.instance.update(wordArray);
+            });
+        }
+
+        const result = {};
+        hashers.forEach(hasher => {
+            result[hasher.name] = hasher.instance.finalize().toString(CryptoJS.enc.Hex);
+        });
+        
+        return result;
+    } finally {
+        reader.releaseLock();
+    }
+}
+
+
 /**
  * 
  * @param {gitea.GiteaApi} client 
@@ -168,19 +231,31 @@ async function uploadFiles(client, owner, repo, release_id, all_files, params) {
   }
   // upload new release attachment
   for (const filepath of all_files) {
-    const content = fs.readFileSync(filepath);
-    let blob = new Blob([content]);
+    let curfile = await createStreamableFile(filepath)
     await client.repository.repoCreateReleaseAttachment({
       owner: owner,
       repo: repo,
       id: release_id,
-      attachment: blob,
+      attachment: curfile,
       name: path.basename(filepath),
     })
+    await curfile.close();
+    let algorithms = [];
     if (params.md5sum) {
-      let wordArray = CryptoJS.lib.WordArray.create(content);
-      let hash = CryptoJS.MD5(wordArray).toString();
-      blob = new Blob([hash], { type : 'plain/text' });
+      algorithms = algorithms.concat('md5');
+    }
+    if (params.sha256sum) {
+      algorithms = algorithms.concat('sha256');
+    }
+    let hashes = {};
+    if (algorithms.length !== 0) {
+      curfile = await createStreamableFile(filepath)
+      hashes = await calculateMultipleHashes(curfile, algorithms)
+      await curfile.close();
+    }
+    if (params.md5sum) {
+      let hash = hashes.md5;
+      let blob = new Blob([hash], { type : 'plain/text' });
       await client.repository.repoCreateReleaseAttachment({
         owner: owner,
         repo: repo,
@@ -190,9 +265,8 @@ async function uploadFiles(client, owner, repo, release_id, all_files, params) {
       })
     }
     if (params.sha256sum) {
-      let wordArray = CryptoJS.lib.WordArray.create(content);
-      let hash = CryptoJS.SHA256(wordArray).toString();
-      blob = new Blob([hash], { type : 'plain/text' });
+      let hash = hashes.sha256;
+      let blob = new Blob([hash], { type : 'plain/text' });
       await client.repository.repoCreateReleaseAttachment({
         owner: owner,
         repo: repo,

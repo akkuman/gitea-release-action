@@ -40594,6 +40594,8 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 
+;// CONCATENATED MODULE: external "node:fs/promises"
+const promises_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:fs/promises");
 // EXTERNAL MODULE: external "fs"
 var external_fs_ = __nccwpck_require__(7147);
 var external_fs_namespaceObject = /*#__PURE__*/__nccwpck_require__.t(external_fs_, 2);
@@ -43826,7 +43828,7 @@ var external_path_ = __nccwpck_require__(1017);
 // EXTERNAL MODULE: external "url"
 var external_url_ = __nccwpck_require__(7310);
 ;// CONCATENATED MODULE: external "fs/promises"
-const promises_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("fs/promises");
+const external_fs_promises_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("fs/promises");
 // EXTERNAL MODULE: external "events"
 var external_events_ = __nccwpck_require__(2361);
 // EXTERNAL MODULE: external "stream"
@@ -44870,10 +44872,10 @@ const defaultFS = {
     readlinkSync: external_fs_.readlinkSync,
     realpathSync,
     promises: {
-        lstat: promises_namespaceObject.lstat,
-        readdir: promises_namespaceObject.readdir,
-        readlink: promises_namespaceObject.readlink,
-        realpath: promises_namespaceObject.realpath,
+        lstat: external_fs_promises_namespaceObject.lstat,
+        readdir: external_fs_promises_namespaceObject.readdir,
+        readlink: external_fs_promises_namespaceObject.readlink,
+        realpath: external_fs_promises_namespaceObject.realpath,
     },
 };
 // if they just gave us require('fs') then use our default
@@ -48144,6 +48146,7 @@ var crypto_js = __nccwpck_require__(4134);
 
 
 
+
 function getIsTrue(v) {
     const trueValue = ['true', 'True', 'TRUE']
     return trueValue.includes(v)
@@ -48264,6 +48267,68 @@ function paths(patterns) {
   }, []);
 };
 
+async function createStreamableFile(fpath) {
+  const name = external_path_.basename(fpath);
+  const handle = await promises_namespaceObject.open(fpath);
+  const { size } = await handle.stat();
+
+  const file = new external_buffer_.File([], name);
+  file.stream = () => handle.readableWebStream();
+  file.close = async () => await handle?.close();
+
+  // Set correct size otherwise, fetch will encounter UND_ERR_REQ_CONTENT_LENGTH_MISMATCH
+  Object.defineProperty(file, 'size', { get: () => size });
+
+  return file;
+}
+
+
+async function calculateMultipleHashes(file, algorithms = ['md5', 'sha256']) {
+    const stream = file.stream();
+    const reader = stream.getReader();
+
+    const hashers = algorithms.map(alg => {
+        switch(alg.toLowerCase()) {
+            case 'md5':
+                return { name: 'md5', instance: crypto_js.algo.MD5.create() };
+            case 'sha1':
+                return { name: 'sha1', instance: crypto_js.algo.SHA1.create() };
+            case 'sha256':
+                return { name: 'sha256', instance: crypto_js.algo.SHA256.create() };
+            case 'sha512':
+                return { name: 'sha512', instance: crypto_js.algo.SHA512.create() };
+            default:
+                throw new Error(`not support hash: ${alg}`);
+        }
+    });
+    
+    try {
+        while (true) {
+            const { done, value } = await reader.read();
+            
+            if (done) {
+                break;
+            }
+            
+            const wordArray = crypto_js.lib.WordArray.create(value);
+
+            hashers.forEach(hasher => {
+                hasher.instance.update(wordArray);
+            });
+        }
+
+        const result = {};
+        hashers.forEach(hasher => {
+            result[hasher.name] = hasher.instance.finalize().toString(crypto_js.enc.Hex);
+        });
+        
+        return result;
+    } finally {
+        reader.releaseLock();
+    }
+}
+
+
 /**
  * 
  * @param {gitea.GiteaApi} client 
@@ -48304,19 +48369,31 @@ async function uploadFiles(client, owner, repo, release_id, all_files, params) {
   }
   // upload new release attachment
   for (const filepath of all_files) {
-    const content = external_fs_.readFileSync(filepath);
-    let blob = new external_buffer_.Blob([content]);
+    let curfile = await createStreamableFile(filepath)
     await client.repository.repoCreateReleaseAttachment({
       owner: owner,
       repo: repo,
       id: release_id,
-      attachment: blob,
+      attachment: curfile,
       name: external_path_.basename(filepath),
     })
+    await curfile.close();
+    let algorithms = [];
     if (params.md5sum) {
-      let wordArray = crypto_js.lib.WordArray.create(content);
-      let hash = crypto_js.MD5(wordArray).toString();
-      blob = new external_buffer_.Blob([hash], { type : 'plain/text' });
+      algorithms = algorithms.concat('md5');
+    }
+    if (params.sha256sum) {
+      algorithms = algorithms.concat('sha256');
+    }
+    let hashes = {};
+    if (algorithms.length !== 0) {
+      curfile = await createStreamableFile(filepath)
+      hashes = await calculateMultipleHashes(curfile, algorithms)
+      await curfile.close();
+    }
+    if (params.md5sum) {
+      let hash = hashes.md5;
+      let blob = new external_buffer_.Blob([hash], { type : 'plain/text' });
       await client.repository.repoCreateReleaseAttachment({
         owner: owner,
         repo: repo,
@@ -48326,9 +48403,8 @@ async function uploadFiles(client, owner, repo, release_id, all_files, params) {
       })
     }
     if (params.sha256sum) {
-      let wordArray = crypto_js.lib.WordArray.create(content);
-      let hash = crypto_js.SHA256(wordArray).toString();
-      blob = new external_buffer_.Blob([hash], { type : 'plain/text' });
+      let hash = hashes.sha256;
+      let blob = new external_buffer_.Blob([hash], { type : 'plain/text' });
       await client.repository.repoCreateReleaseAttachment({
         owner: owner,
         repo: repo,
