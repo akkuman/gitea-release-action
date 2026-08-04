@@ -35,6 +35,7 @@ async function run() {
       BASE: `${server_url}/api/v1`,
       WITH_CREDENTIALS: true,
       TOKEN: token,
+      ENCODE_PATH: encodeURIComponent,
     });
 
     const response = await createOrGetRelease(gitea_client, owner, repo, {
