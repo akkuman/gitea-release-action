@@ -48173,6 +48173,7 @@ async function run() {
       BASE: `${server_url}/api/v1`,
       WITH_CREDENTIALS: true,
       TOKEN: token,
+      ENCODE_PATH: encodeURIComponent,
     });
 
     const response = await createOrGetRelease(gitea_client, owner, repo, {
@@ -48209,6 +48210,7 @@ async function run() {
  */
 async function createOrGetRelease(client, owner, repo, body) {
   try {
+    console.log(`Checking for existing release at ${encodeURIComponent(body.tag_name)}`);
     let release = await client.repository.repoGetReleaseByTag({
       owner: owner,
       repo: repo,
