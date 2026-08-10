@@ -23,5 +23,8 @@
   },
   "devDependencies": {
     "@vercel/ncc": "^0.38.1"
+  },
+  "overrides": {
+    "brace-expansion": "2.1.2"
   }
 }
